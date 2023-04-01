@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import pro.sky.recipeapp.model.Ingredient;
 import pro.sky.recipeapp.service.IngredientService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/ingredient")
 public class IngredientController {
@@ -27,5 +29,36 @@ public class IngredientController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ingredient);
+    }
+    @GetMapping
+    public ResponseEntity<Map<Long, Ingredient>> getAllIngredients() {
+        Map<Long, Ingredient> ingredients = ingredientService.getAllIngredients();
+        if (ingredients == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ingredients);
+    }
+
+    @PutMapping("/{ingredientNumber}")
+    public ResponseEntity<Ingredient> editIngredient(@PathVariable long ingredientNumber, @RequestBody Ingredient ingredient) {
+        Ingredient ingredient1 = ingredientService.editIngredient(ingredientNumber, ingredient);
+        if (ingredient1 == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ingredient1);
+    }
+
+    @DeleteMapping("/{ingredientNumber}")
+    public ResponseEntity<Void> deleteIngredientById(@PathVariable long ingredientNumber) {
+        if (ingredientService.deleteIngredientById(ingredientNumber)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllIngredients() {
+        ingredientService.deleteAllIngredients();
+        return ResponseEntity.ok().build();
     }
 }

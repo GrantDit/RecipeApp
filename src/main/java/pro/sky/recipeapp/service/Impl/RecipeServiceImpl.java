@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
-    private static final Map<Long, Recipe> recipes = new HashMap<>();
+    private static Map<Long, Recipe> recipes = new HashMap<>();
     private static long recipeNumber = 0;
 
     @Override
@@ -19,7 +19,35 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Map<Long, Recipe> getAllRecipes() {
+        return recipes;
+    }
+
+    @Override
     public Recipe getRecipe(long recipeNumber) {
         return recipes.get(recipeNumber);
+    }
+
+    @Override
+    public Recipe editRecipe(long recipeNumber, Recipe recipe) {
+        if (recipes.containsKey(recipeNumber)) {
+            recipes.put(recipeNumber, recipe);
+            return recipe;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteRecipeById(long recipeNumber) {
+        if (recipes.containsKey(recipeNumber)) {
+            recipes.remove(recipeNumber);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void deleteAllRecipes() {
+        recipes = new HashMap<>();
     }
 }
